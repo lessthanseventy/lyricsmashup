@@ -1,9 +1,9 @@
-defmodule Lyricsmarkov.MixProject do
+defmodule Phxtwit.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :lyricsmarkov,
+      app: :phxtwit,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Lyricsmarkov.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Lyricsmarkov.Application, []},
+      mod: {Phxtwit.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

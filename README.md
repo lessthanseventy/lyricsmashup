@@ -1,4 +1,4 @@
-# Lyricsmarkov
+# Phxtwit
 
 To start your Phoenix server:
 

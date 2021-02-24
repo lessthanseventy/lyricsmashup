@@ -1,4 +1,4 @@
-defmodule Lyricsmarkov.DataCase do
+defmodule Phxtwit.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Lyricsmarkov.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Lyricsmarkov.DataCase, async: true`, although
+  by setting `use Phxtwit.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Lyricsmarkov.DataCase do
 
   using do
     quote do
-      alias Lyricsmarkov.Repo
+      alias Phxtwit.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Lyricsmarkov.DataCase
+      import Phxtwit.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lyricsmarkov.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Phxtwit.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Lyricsmarkov.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Phxtwit.Repo, {:shared, self()})
     end
 
     :ok

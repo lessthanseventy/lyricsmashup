@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :lyricsmarkov, Lyricsmarkov.Repo,
+config :phxtwit, Phxtwit.Repo,
   username: "postgres",
   password: "postgres",
-  database: "lyricsmarkov_dev",
+  database: "phxtwit_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :lyricsmarkov, Lyricsmarkov.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :lyricsmarkov, LyricsmarkovWeb.Endpoint,
+config :phxtwit, PhxtwitWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :lyricsmarkov, LyricsmarkovWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :lyricsmarkov, LyricsmarkovWeb.Endpoint,
+config :phxtwit, PhxtwitWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/lyricsmarkov_web/(live|views)/.*(ex)$",
-      ~r"lib/lyricsmarkov_web/templates/.*(eex)$"
+      ~r"lib/phxtwit_web/(live|views)/.*(ex)$",
+      ~r"lib/phxtwit_web/templates/.*(eex)$"
     ]
   ]
 

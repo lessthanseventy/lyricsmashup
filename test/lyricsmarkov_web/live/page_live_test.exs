@@ -1,5 +1,5 @@
-defmodule LyricsmarkovWeb.PageLiveTest do
-  use LyricsmarkovWeb.ConnCase
+defmodule PhxtwitWeb.PageLiveTest do
+  use PhxtwitWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

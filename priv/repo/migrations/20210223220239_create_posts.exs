@@ -1,4 +1,4 @@
-defmodule Lyricsmarkov.Repo.Migrations.CreatePosts do
+defmodule Phxtwit.Repo.Migrations.CreatePosts do
   use Ecto.Migration
 
   def change do

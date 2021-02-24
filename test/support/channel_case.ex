@@ -1,4 +1,4 @@
-defmodule LyricsmarkovWeb.ChannelCase do
+defmodule PhxtwitWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule LyricsmarkovWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use LyricsmarkovWeb.ChannelCase, async: true`, although
+  by setting `use PhxtwitWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule LyricsmarkovWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import LyricsmarkovWeb.ChannelCase
+      import PhxtwitWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint LyricsmarkovWeb.Endpoint
+      @endpoint PhxtwitWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lyricsmarkov.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Phxtwit.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Lyricsmarkov.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Phxtwit.Repo, {:shared, self()})
     end
 
     :ok

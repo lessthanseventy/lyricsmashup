@@ -1,10 +1,10 @@
-defmodule Lyricsmarkov.TimelineTest do
-  use Lyricsmarkov.DataCase
+defmodule Phxtwit.TimelineTest do
+  use Phxtwit.DataCase
 
-  alias Lyricsmarkov.Timeline
+  alias Phxtwit.Timeline
 
   describe "posts" do
-    alias Lyricsmarkov.Timeline.Post
+    alias Phxtwit.Timeline.Post
 
     @valid_attrs %{body: "some body", num_likes: 42, num_shares: 42, username: "some username"}
     @update_attrs %{body: "some updated body", num_likes: 43, num_shares: 43, username: "some updated username"}
