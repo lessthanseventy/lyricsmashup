@@ -1,5 +1,5 @@
-defmodule PhxtwitWeb.PageLiveTest do
-  use PhxtwitWeb.ConnCase
+defmodule GaslightWeb.PageLiveTest do
+  use GaslightWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

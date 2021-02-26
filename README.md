@@ -1,4 +1,4 @@
-# Phxtwit
+# Gaslight
 
 To start your Phoenix server:
 

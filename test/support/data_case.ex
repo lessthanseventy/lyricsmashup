@@ -1,4 +1,4 @@
-defmodule Phxtwit.DataCase do
+defmodule Gaslight.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Phxtwit.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Phxtwit.DataCase, async: true`, although
+  by setting `use Gaslight.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Phxtwit.DataCase do
 
   using do
     quote do
-      alias Phxtwit.Repo
+      alias Gaslight.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Phxtwit.DataCase
+      import Gaslight.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Phxtwit.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gaslight.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Phxtwit.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Gaslight.Repo, {:shared, self()})
     end
 
     :ok

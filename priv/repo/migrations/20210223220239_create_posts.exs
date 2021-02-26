@@ -1,4 +1,4 @@
-defmodule Phxtwit.Repo.Migrations.CreatePosts do
+defmodule Gaslight.Repo.Migrations.CreatePosts do
   use Ecto.Migration
 
   def change do

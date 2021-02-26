@@ -1,9 +1,9 @@
-defmodule PhxtwitWeb.PostLiveTest do
-  use PhxtwitWeb.ConnCase
+defmodule GaslightWeb.PostLiveTest do
+  use GaslightWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias Phxtwit.Timeline
+  alias Gaslight.Timeline
 
   @create_attrs %{body: "some body", num_likes: 42, num_shares: 42, username: "some username"}
   @update_attrs %{body: "some updated body", num_likes: 43, num_shares: 43, username: "some updated username"}

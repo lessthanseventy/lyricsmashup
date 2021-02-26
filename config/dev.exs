@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :phxtwit, Phxtwit.Repo,
+config :gaslight, Gaslight.Repo,
   username: "postgres",
   password: "postgres",
-  database: "phxtwit_dev",
+  database: "gaslight_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :phxtwit, Phxtwit.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :phxtwit, PhxtwitWeb.Endpoint,
+config :gaslight, GaslightWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :phxtwit, PhxtwitWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :phxtwit, PhxtwitWeb.Endpoint,
+config :gaslight, GaslightWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/phxtwit_web/(live|views)/.*(ex)$",
-      ~r"lib/phxtwit_web/templates/.*(eex)$"
+      ~r"lib/gaslight_web/(live|views)/.*(ex)$",
+      ~r"lib/gaslight_web/templates/.*(eex)$"
     ]
   ]
 

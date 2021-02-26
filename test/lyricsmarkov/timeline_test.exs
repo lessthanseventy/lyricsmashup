@@ -1,10 +1,10 @@
-defmodule Phxtwit.TimelineTest do
-  use Phxtwit.DataCase
+defmodule Gaslight.TimelineTest do
+  use Gaslight.DataCase
 
-  alias Phxtwit.Timeline
+  alias Gaslight.Timeline
 
   describe "posts" do
-    alias Phxtwit.Timeline.Post
+    alias Gaslight.Timeline.Post
 
     @valid_attrs %{body: "some body", num_likes: 42, num_shares: 42, username: "some username"}
     @update_attrs %{body: "some updated body", num_likes: 43, num_shares: 43, username: "some updated username"}

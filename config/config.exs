@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :phxtwit,
-  ecto_repos: [Phxtwit.Repo]
+config :gaslight,
+  ecto_repos: [Gaslight.Repo]
 
 # Configures the endpoint
-config :phxtwit, PhxtwitWeb.Endpoint,
+config :gaslight, GaslightWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "fl+ZBX0c8Sb2Y535RI78YTVDi5psIfJrL6KmZAO1rFhTJyZJiKQGNuKuoF6K/la5",
-  render_errors: [view: PhxtwitWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Phxtwit.PubSub,
+  render_errors: [view: GaslightWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Gaslight.PubSub,
   live_view: [signing_salt: "TATMt0JZrV/XnuUzIBksI75n63LMv5N8"]
 
 # Configures Elixir's Logger

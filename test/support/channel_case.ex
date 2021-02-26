@@ -1,4 +1,4 @@
-defmodule PhxtwitWeb.ChannelCase do
+defmodule GaslightWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule PhxtwitWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use PhxtwitWeb.ChannelCase, async: true`, although
+  by setting `use GaslightWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule PhxtwitWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import PhxtwitWeb.ChannelCase
+      import GaslightWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint PhxtwitWeb.Endpoint
+      @endpoint GaslightWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Phxtwit.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Gaslight.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Phxtwit.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Gaslight.Repo, {:shared, self()})
     end
 
     :ok
