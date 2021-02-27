@@ -1,0 +1,32 @@
+<h1>Show Song</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, GaslightWeb.SongLive.FormComponent,
+    id: @song.id,
+    title: @page_title,
+    action: @live_action,
+    song: @song,
+    return_to: Routes.song_show_path(@socket, :show, @song) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Artist:</strong>
+    <%= @song.artist %>
+  </li>
+
+  <li>
+    <strong>Genius lyrics:</strong>
+    <%= @song.genius_lyrics %>
+  </li>
+
+  <li>
+    <strong>Songs:</strong>
+    <%= @song.songs %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.song_show_path(@socket, :edit, @song), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.song_index_path(@socket, :index) %></span>

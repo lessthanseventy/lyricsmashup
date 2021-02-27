@@ -1,0 +1,22 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "song-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :artist %>
+  <%= text_input f, :artist %>
+  <%= error_tag f, :artist %>
+
+  <%= label f, :genius_lyrics %>
+  <%= textarea f, :genius_lyrics %>
+  <%= error_tag f, :genius_lyrics %>
+
+  <%= label f, :songs %>
+  <%= multiple_select f, :songs, ["Option 1": "option1", "Option 2": "option2"] %>
+  <%= error_tag f, :songs %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

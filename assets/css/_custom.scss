@@ -18,6 +18,9 @@ body {
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
+        & #inputForm {
+            color: white;
+        }
         & #posts {
             align-items: center;
             width: 100%;

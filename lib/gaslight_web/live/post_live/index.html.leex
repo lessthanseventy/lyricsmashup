@@ -9,10 +9,10 @@
     return_to: Routes.post_index_path(@socket, :index) %>
 <% end %>
 
-  <div id="posts" phx-update="prepend">
-    <%= for post <- @posts do %>
-        <%= live_component @socket, GaslightWeb.PostLive.PostComponent, id: post.id, post: post%>
-        <% end %>
-    </div>
+<div id="posts" phx-update="prepend">
+  <%= for post <- @posts do %>
+    <%= live_component @socket, GaslightWeb.PostLive.PostComponent, id: post.id, post: post%>
+  <% end %>
+</div>
 
 <button class="btn-success"><%= live_patch "New Post", to: Routes.post_index_path(@socket, :new) %></button>
