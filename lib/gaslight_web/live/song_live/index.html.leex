@@ -1,4 +1,4 @@
-<h1>Song Generator</h1>
+<h1><%= @page_title %></h1>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, GaslightWeb.SongLive.FormComponent,
@@ -8,7 +8,9 @@
     song: @song,
     return_to: Routes.song_index_path(@socket, :index) %>
 <% end %>
-<div id="songInputs" phx-hook="Lyrics">
+
+<%= if @live_action in [:index] do %>
+<div id="songInputs" phx-hook="Lyrics" phx-click="lv:clear-flash">
   <input
       class="input is-primary"
       id="inputForm"
@@ -19,36 +21,20 @@
   <button id="genButton" type="submit" />Generate Song</button>
   <button id="addButton" type="submit" />Add to Current Song</button>
   <button id="clearButton" type="submit" />Clear</button>
+  <button id="saveButton" type="submit" />Save</button>
+
 </div>
 <div id="results">
   <div id="songsOutput"></div>
-  <div id="lyrics"></div>
+  <div id="resultsRightColumn">
+    <div id="loadingSpinner"><h2>Generating Song...</h2><i id="musicNote" class="fas fa-music"></i></div>
+    <div id="lyrics"></div>
+  </div>
 </div>
+<% end %>
 
-<!-- <table> -->
-<!--   <thead> -->
-<!--     <tr> -->
-<!--       <th>Artist</th> -->
-<!--       <th>Genius lyrics</th> -->
-<!--       <th>Songs</th> -->
-
-<!--       <th></th> -->
-<!--     </tr> -->
-<!--   </thead> -->
-<!--   <tbody id="songs"> -->
-<!--     <%= for song <- @songs do %> -->
-<!--       <tr id="song-<%= song.id %>"> -->
-<!--         <td><%= song.artist %></td> -->
-<!--         <td><%= song.genius_lyrics %></td> -->
-<!--         <td><%= song.songs %></td> -->
-
-<!--         <td> -->
-<!--           <span><%= live_redirect "Show", to: Routes.song_show_path(@socket, :show, song) %></span> -->
-<!--           <span><%= live_patch "Edit", to: Routes.song_index_path(@socket, :edit, song) %></span> -->
-<!--           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: song.id, data: [confirm: "Are you sure?"] %></span> -->
-<!--         </td> -->
-<!--       </tr> -->
-<!--     <% end %> -->
-<!--   </tbody> -->
-<!-- </table> -->
-<!-- <span><%= live_patch "New Song", to: Routes.song_index_path(@socket, :new) %></span> -->
+<%= if @live_action in [:list] do %>
+  <%= for song <- @songs do %>
+    <%= live_component @socket, GaslightWeb.SongLive.SongComponent, title: song.title, lyrics: song.lyrics, id: song.id %>
+  <% end %>
+<% end %>

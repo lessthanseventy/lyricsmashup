@@ -3,17 +3,14 @@ defmodule Gaslight.Markov.Song do
   import Ecto.Changeset
 
   schema "songs" do
-    field :artist, :string
-    field :genius_lyrics, :string
-    field :songs, {:array, :string}
-
+    field :title, :string
+    field :lyrics, :string
     timestamps()
   end
 
   @doc false
   def changeset(song, attrs) do
     song
-    |> cast(attrs, [:artist, :genius_lyrics, :songs])
-    |> validate_required([:artist, :genius_lyrics, :songs])
+    |> cast(attrs, [:title, :lyrics])
   end
 end

@@ -19,17 +19,28 @@ body {
         flex-flow: column nowrap;
         align-items: center;
         // Songs Styles
+        & p.alert {
+            width: 80vw;
+            text-align: center;
+            color: white;
+            background: #ff0f0f;
+            border: none;
+            font-size: 2.25rem;
+            height: 4.5rem;
+            line-height: 2.25rem;
+            position: absolute;
+        }
         & #songInputs {
             display: flex;
             & #inputForm {
                 color: white;
             }
-            & #genButton, #addButton, #clearButton {
+            & #genButton, #addButton, #clearButton, #saveButton {
                 padding: 0 1rem;
                 margin-left: 1rem;
                 border-radius: 5px;
             }
-            & #addButton, #clearButton {
+            & #addButton, #clearButton, #saveButton {
                 display: none;
             }
         }
@@ -62,17 +73,38 @@ body {
             }
             & #lyrics {
                 margin-left: 2rem;
-                width: 65%;
                 flex-flow: column nowrap;
                 & #lyricsResult {
+                    margin-left: 3rem;
                     & h1 {
                         font-size: 2rem;
                     }
                     & div {
-                    font-size: 1.35rem;
+                        font-size: 1.35rem;
+                    }
                 }
             }
+            & #resultsRightColumn {
+                position: relative;
+                width: 100%;
             }
+            & #loadingSpinner {
+                display: none;
+                & h2 {
+                    font-size: 3rem;
+                    position: absolute;
+                    top: 2rem;
+                    left: 45%;
+                }
+                & #musicNote {
+                    font-size: 12rem;
+                    position: absolute;
+                    top: 10rem;
+                    left: 50%;
+                    animation: notes 2s infinite linear;
+                }
+            }
+
         }
         // Posts Styles
         & #posts {
@@ -110,5 +142,24 @@ body {
                 color: white;
             }
         }
+    }
+}
+
+@keyframes notes {
+    0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.25) rotate(-1turn);
+    }
+    80% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1.5) rotate(-1turn) translate(0, 100%);
+        opacity: 0;
     }
 }

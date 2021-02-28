@@ -21,6 +21,7 @@ import "regenerator-runtime/runtime";
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 const Markov = require("markov-generator");
+const datamuse = require("datamuse");
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -33,12 +34,21 @@ const accessToken =
 window.addEventListener("phx:page-loading-start", (info) => NProgress.start());
 window.addEventListener("phx:page-loading-stop", (info) => NProgress.done());
 
+class HttpError extends Error {
+  // (1)
+  constructor(message) {
+    super(message);
+    this.name = "HttpError";
+  }
+}
+
 let Hooks = {};
 Hooks.Lyrics = {
   mounted() {
     document.getElementById("genButton").addEventListener("click", onSubmit);
     document.getElementById("addButton").addEventListener("click", onSubmit);
     document.getElementById("clearButton").addEventListener("click", reinit);
+    const view = this;
 
     let lyricsArray = [];
     function reinit() {
@@ -48,12 +58,16 @@ Hooks.Lyrics = {
       document.getElementById("genButton").style.display = "block";
       document.getElementById("addButton").style.display = "none";
       document.getElementById("clearButton").style.display = "none";
+      document.getElementById("saveButton").style.display = "none";
+      document.getElementById("loadingSpinner").style.display = "none";
     }
-
+    let songToSave = {};
     async function onSubmit() {
       document.getElementById("genButton").style.display = "none";
       document.getElementById("addButton").style.display = "block";
       document.getElementById("clearButton").style.display = "block";
+      document.getElementById("loadingSpinner").style.display = "block";
+      document.getElementById("saveButton").style.display = "block";
       let lyrics = document.getElementById("lyrics");
       while (lyrics.firstChild) {
         lyrics.removeChild(lyrics.firstChild);
@@ -62,7 +76,12 @@ Hooks.Lyrics = {
       await artistByName(inputValue)
         .then((res) => songsOutput(res))
         .then((songs) => loopForLyrics(songs))
-        .then((lyrics) => generateSong(lyrics));
+        .then((lyrics) => generateSong(lyrics))
+        .then((song) => (songToSave = song))
+        .catch((err) => {
+          view.pushEvent("bandError", {});
+          reinit();
+        });
     }
 
     async function _request(path) {
@@ -82,8 +101,8 @@ Hooks.Lyrics = {
     }
 
     /*
-Get song by ID
-*/
+    Get song by ID
+    */
 
     async function song(id, { fetchLyrics = false, textFormat = "dom" } = {}) {
       if (!id) throw new Error("No ID was provided to lyricist.song()");
@@ -116,7 +135,7 @@ Get song by ID
 
     async function songsByArtist(
       id,
-      { page = 1, perPage = 10, sort = "popularity" } = {}
+      { page = 1, perPage = 15, sort = "popularity" } = {}
     ) {
       if (!id)
         throw new Error("No ID was provided to lyricist.songsByArtist()");
@@ -176,7 +195,6 @@ Get song by ID
       }
       html += "</ol></div>";
       elem.innerHTML += html;
-      console.log(arrayOfSongs);
       return arrayOfSongs;
     }
     /* Loop through array of song ids and return cleaned array of strings to pass to Markov Generator */
@@ -209,20 +227,81 @@ Get song by ID
       });
       let title = titleMarkov.makeChain();
       let html = `<div id="lyricsResult"><h1 class="has-text-primary">${title}</h1>`;
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < 12; i++) {
         let markov = new Markov({
           input: arrayOfLyrics,
-          minLength: 9,
-          maxLength: 13,
+          minLength: 8,
+          maxLength: 11,
         });
-        let sentence = markov.makeChain();
-        if (i != 0 && i % 4 == 0) {
+        let firstLine = markov
+          .makeChain()
+          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "")
+          .replace(/\s{2,}/g, " ");
+        // Regenerate line if first two words are duplicated
+        do {
+          firstLine = markov
+            .makeChain()
+            .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "") // Remove punctuation
+            .replace(/\s{2,}/g, " "); // Fix double spaces from ^
+        } while (
+          firstLine.split(" ")[0].toLowerCase() ==
+            firstLine.split(" ")[1].toLowerCase() ||
+          firstLine.split(" ")[0].length > 10
+        );
+        let rhymer = firstLine.split(" ").pop();
+        let rhymes = await datamuse.words({
+          rel_rhy: rhymer,
+        });
+        if (rhymes.length === 0) {
+          firstLine = firstLine.substring(0, firstLine.lastIndexOf(" "));
+          rhymer = firstLine.split(" ").pop();
+          rhymes = await datamuse.words({
+            rel_rhy: rhymer,
+          });
+        }
+        let secondLine = markov
+          .makeChain()
+          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "")
+          .replace(/\s{2,}/g, " ");
+        // Regenerate line if first two words are duplicated
+        do {
+          secondLine = markov
+            .makeChain()
+            .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "") // Remove punctuation
+            .replace(/\s{2,}/g, " "); // Fix double spaces from ^
+        } while (
+          secondLine.split(" ")[0].toLowerCase() ==
+            secondLine.split(" ")[1].toLowerCase() ||
+          firstLine.split(" ")[0].length > 10
+        );
+        let rhymingWord;
+        let counter = 0;
+        do {
+          rhymingWord = rhymes[counter];
+          counter = counter + 1;
+        } while (rhymingWord.word.length < 3);
+        secondLine += ` ${rhymingWord.word.toString()}`;
+        if (i != 0 && i % 2 == 0) {
           html += "<div><br></div>";
         }
-        html += "<div>" + sentence + "</div>";
+        html += "<div>" + firstLine + "</div>";
+        html += "<div>" + secondLine + "</div>";
       }
+      document.getElementById("loadingSpinner").style.display = "none";
       document.getElementById("lyrics").innerHTML = html;
+      let songToSave = {
+        title: title.toString(),
+        lyrics: html.toString(),
+      };
+      return songToSave;
     }
+    var listener = {
+      handleEvent: function (event) {
+        view.pushEvent("saveSong", songToSave);
+        reinit();
+      },
+    };
+    document.getElementById("saveButton").addEventListener("click", listener);
   },
 };
 

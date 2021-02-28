@@ -3,7 +3,7 @@ defmodule GaslightWeb.SongLive.Index do
 
   alias Gaslight.Markov
   alias Gaslight.Markov.Song
-
+  alias Gaslight.Repo
   @impl true
   def mount(_params, _session, socket) do
     {:ok, assign(socket, :songs, list_songs())}
@@ -32,6 +32,11 @@ defmodule GaslightWeb.SongLive.Index do
     |> assign(:song, nil)
   end
 
+  defp apply_action(socket, :list, _params) do
+    socket
+    |> assign(:page_title, "Songs")
+  end
+
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     song = Markov.get_song!(id)
@@ -40,7 +45,21 @@ defmodule GaslightWeb.SongLive.Index do
     {:noreply, assign(socket, :songs, list_songs())}
   end
 
+  def handle_event("bandError", _params, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, "Band not found. Try Again")}
+  end
+
+  def handle_event("saveSong", params, socket) do
+    IO.inspect(params, [])
+    %Song{}
+    |> Song.changeset(params)
+    |> Repo.insert()
+  end
+
   defp list_songs do
     Markov.list_songs()
   end
+
 end
