@@ -28,7 +28,7 @@ defmodule GaslightWeb.SongLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Songs")
+    |> assign(:page_title, "Song Generator")
     |> assign(:song, nil)
   end
 

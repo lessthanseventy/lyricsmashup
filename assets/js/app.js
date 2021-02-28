@@ -34,11 +34,26 @@ window.addEventListener("phx:page-loading-start", (info) => NProgress.start());
 window.addEventListener("phx:page-loading-stop", (info) => NProgress.done());
 
 let Hooks = {};
-Hooks.Button = {
+Hooks.Lyrics = {
   mounted() {
-    document.getElementById("inputButton").addEventListener("click", onSubmit);
+    document.getElementById("genButton").addEventListener("click", onSubmit);
+    document.getElementById("addButton").addEventListener("click", onSubmit);
+    document.getElementById("clearButton").addEventListener("click", reinit);
+
+    let lyricsArray = [];
+    function reinit() {
+      lyricsArray = [];
+      document.getElementById("lyrics").innerHTML = "";
+      document.getElementById("songsOutput").innerHTML = "";
+      document.getElementById("genButton").style.display = "block";
+      document.getElementById("addButton").style.display = "none";
+      document.getElementById("clearButton").style.display = "none";
+    }
 
     async function onSubmit() {
+      document.getElementById("genButton").style.display = "none";
+      document.getElementById("addButton").style.display = "block";
+      document.getElementById("clearButton").style.display = "block";
       let lyrics = document.getElementById("lyrics");
       while (lyrics.firstChild) {
         lyrics.removeChild(lyrics.firstChild);
@@ -46,7 +61,7 @@ Hooks.Button = {
       let inputValue = document.getElementById("inputForm").value.toString();
       await artistByName(inputValue)
         .then((res) => songsOutput(res))
-        .then((res) => loopForLyrics(res))
+        .then((songs) => loopForLyrics(songs))
         .then((lyrics) => generateSong(lyrics));
     }
 
@@ -150,23 +165,23 @@ Get song by ID
         .pop();
       return id;
     }
+
     /* Populate list of songs */
     async function songsOutput(arrayOfSongs) {
-      let html = `<div class="content"><h1 id="songsHeading" class="has-text-success">${arrayOfSongs[9].primary_artist.name} Top Songs</h1><ol class="is-medium has-text-success" type="1">`;
+      let html = `<div id="songsContent"><h1 id="songsHeading" class="has-text-success">${arrayOfSongs[9].primary_artist.name}</h1><ol class="is-medium has-text-success" type="1">`;
       let elem = document.getElementById("songsOutput");
       for (let i = 0; i < arrayOfSongs.length; i++) {
         html +=
           "<li>" + arrayOfSongs[i].full_title.replace(/ by.*/g, "") + "</li>";
       }
       html += "</ol></div>";
-      elem.innerHTML = html;
+      elem.innerHTML += html;
       console.log(arrayOfSongs);
       return arrayOfSongs;
     }
     /* Loop through array of song ids and return cleaned array of strings to pass to Markov Generator */
     async function loopForLyrics(arr) {
       let temp = [];
-      let lyricsArray = [];
       for (let i = 0; i < arr.length; i++) {
         await song(arr[i].id, { fetchLyrics: true }).then(function (res) {
           /* remove [Verse] and such and any parentheses */
@@ -193,8 +208,7 @@ Get song by ID
         maxLength: 7,
       });
       let title = titleMarkov.makeChain();
-      console.log(title);
-      let html = `<div class="is-size-7-mobile"><h1 class="has-text-primary">${title}</h1>`;
+      let html = `<div id="lyricsResult"><h1 class="has-text-primary">${title}</h1>`;
       for (let i = 0; i < 24; i++) {
         let markov = new Markov({
           input: arrayOfLyrics,
@@ -209,7 +223,6 @@ Get song by ID
       }
       document.getElementById("lyrics").innerHTML = html;
     }
-    console.log("Hello");
   },
 };
 

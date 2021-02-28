@@ -1,4 +1,4 @@
-<h1>Listing Songs</h1>
+<h1>Song Generator</h1>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, GaslightWeb.SongLive.FormComponent,
@@ -8,17 +8,22 @@
     song: @song,
     return_to: Routes.song_index_path(@socket, :index) %>
 <% end %>
-
-<input
-    class="input is-primary"
-    id="inputForm"
-    name="artistInput"
-    type="text"
-    placeholder="Enter Artist"
-/>
-<button id="inputButton" type="submit" phx-hook="Button"/>Generate Song</button>
-<div id="songsOutput"></div>
-<div id="lyrics"></div>
+<div id="songInputs" phx-hook="Lyrics">
+  <input
+      class="input is-primary"
+      id="inputForm"
+      name="artistInput"
+      type="text"
+      placeholder="Enter Artist"
+  />
+  <button id="genButton" type="submit" />Generate Song</button>
+  <button id="addButton" type="submit" />Add to Current Song</button>
+  <button id="clearButton" type="submit" />Clear</button>
+</div>
+<div id="results">
+  <div id="songsOutput"></div>
+  <div id="lyrics"></div>
+</div>
 
 <!-- <table> -->
 <!--   <thead> -->

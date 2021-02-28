@@ -18,9 +18,63 @@ body {
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
-        & #inputForm {
-            color: white;
+        // Songs Styles
+        & #songInputs {
+            display: flex;
+            & #inputForm {
+                color: white;
+            }
+            & #genButton, #addButton, #clearButton {
+                padding: 0 1rem;
+                margin-left: 1rem;
+                border-radius: 5px;
+            }
+            & #addButton, #clearButton {
+                display: none;
+            }
         }
+        & #results {
+            display: flex;
+            flex-flow: row nowrap;
+            width: 100%;
+            justify-content: flex-start;
+            margin-top: 2rem;
+            border-top: 1px solid white;
+            padding-top: 2rem;
+            & #songsOutput {
+                margin-left: 0;
+                margin-right: auto;
+                flex-flow: column nowrap;
+                width: 35%;
+                & #songsContent {
+                    & h1 {
+                        margin: 0 0 .25rem 0;
+                        border-bottom: 1px solid white;
+                    }
+                    & ol li {
+                        margin: 0;
+                        font-size: 1.25rem;
+                    }
+                    & h1 {
+                        font-size: 2rem;
+                    }
+                }
+            }
+            & #lyrics {
+                margin-left: 2rem;
+                width: 65%;
+                flex-flow: column nowrap;
+                & #lyricsResult {
+                    & h1 {
+                        font-size: 2rem;
+                    }
+                    & div {
+                    font-size: 1.35rem;
+                }
+            }
+            }
+        }
+        // Posts Styles
         & #posts {
             align-items: center;
             width: 100%;
@@ -54,10 +108,7 @@ body {
             margin: 2rem 3rem 0 auto;
             a {
                 color: white;
-
             }
         }
     }
 }
-
-
