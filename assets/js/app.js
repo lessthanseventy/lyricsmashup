@@ -34,14 +34,6 @@ const accessToken =
 window.addEventListener("phx:page-loading-start", (info) => NProgress.start());
 window.addEventListener("phx:page-loading-stop", (info) => NProgress.done());
 
-class HttpError extends Error {
-  // (1)
-  constructor(message) {
-    super(message);
-    this.name = "HttpError";
-  }
-}
-
 let Hooks = {};
 Hooks.Lyrics = {
   mounted() {
@@ -49,8 +41,9 @@ Hooks.Lyrics = {
     document.getElementById("addButton").addEventListener("click", onSubmit);
     document.getElementById("clearButton").addEventListener("click", reinit);
     const view = this;
-
     let lyricsArray = [];
+    let songToSave = {};
+
     function reinit() {
       lyricsArray = [];
       document.getElementById("lyrics").innerHTML = "";
@@ -61,7 +54,6 @@ Hooks.Lyrics = {
       document.getElementById("saveButton").style.display = "none";
       document.getElementById("loadingSpinner").style.display = "none";
     }
-    let songToSave = {};
     async function onSubmit() {
       document.getElementById("genButton").style.display = "none";
       document.getElementById("addButton").style.display = "block";
@@ -187,7 +179,7 @@ Hooks.Lyrics = {
 
     /* Populate list of songs */
     async function songsOutput(arrayOfSongs) {
-      let html = `<div id="songsContent"><h1 id="songsHeading" class="has-text-success">${arrayOfSongs[9].primary_artist.name}</h1><ol class="is-medium has-text-success" type="1">`;
+      let html = `<div id="songsContent"><h1 id="songsHeading">${arrayOfSongs[9].primary_artist.name}</h1><ol type="1">`;
       let elem = document.getElementById("songsOutput");
       for (let i = 0; i < arrayOfSongs.length; i++) {
         html +=
@@ -225,7 +217,15 @@ Hooks.Lyrics = {
         minLength: 5,
         maxLength: 7,
       });
-      let title = titleMarkov.makeChain();
+      let title;
+      do {
+        title = titleMarkov.makeChain();
+        console.log(title);
+      } while (
+        title.split(" ")[0].length > 12 ||
+        title.split(" ")[0] == title.split(" ")[1] ||
+        title.split(" ")[1] == title.split(" ")[2]
+      );
       let html = `<div id="lyricsResult"><h1 class="has-text-primary">${title}</h1>`;
       for (let i = 0; i < 12; i++) {
         let markov = new Markov({
@@ -235,19 +235,19 @@ Hooks.Lyrics = {
         });
         let firstLine = markov
           .makeChain()
-          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "")
+          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()"]/g, "")
           .replace(/\s{2,}/g, " ");
         // Regenerate line if first two words are duplicated
-        do {
-          firstLine = markov
-            .makeChain()
-            .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "") // Remove punctuation
-            .replace(/\s{2,}/g, " "); // Fix double spaces from ^
-        } while (
+        while (
           firstLine.split(" ")[0].toLowerCase() ==
             firstLine.split(" ")[1].toLowerCase() ||
           firstLine.split(" ")[0].length > 10
-        );
+        ) {
+          firstLine = markov
+            .makeChain()
+            .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()"]/g, "") // Remove punctuation
+            .replace(/\s{2,}/g, " "); // Fix double spaces from ^
+        }
         let rhymer = firstLine.split(" ").pop();
         let rhymes = await datamuse.words({
           rel_rhy: rhymer,
@@ -264,16 +264,16 @@ Hooks.Lyrics = {
           .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "")
           .replace(/\s{2,}/g, " ");
         // Regenerate line if first two words are duplicated
-        do {
+        while (
+          secondLine.split(" ")[0].toLowerCase() ==
+            secondLine.split(" ")[1].toLowerCase() ||
+          firstLine.split(" ")[0].length > 10
+        ) {
           secondLine = markov
             .makeChain()
             .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "") // Remove punctuation
             .replace(/\s{2,}/g, " "); // Fix double spaces from ^
-        } while (
-          secondLine.split(" ")[0].toLowerCase() ==
-            secondLine.split(" ")[1].toLowerCase() ||
-          firstLine.split(" ")[0].length > 10
-        );
+        }
         let rhymingWord;
         let counter = 0;
         do {

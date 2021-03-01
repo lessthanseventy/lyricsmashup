@@ -10,13 +10,9 @@
   <%= text_input f, :artist %>
   <%= error_tag f, :artist %>
 
-  <%= label f, :genius_lyrics %>
-  <%= textarea f, :genius_lyrics %>
-  <%= error_tag f, :genius_lyrics %>
-
-  <%= label f, :songs %>
-  <%= multiple_select f, :songs, ["Option 1": "option1", "Option 2": "option2"] %>
-  <%= error_tag f, :songs %>
+  <%= label f, :lyrics %>
+  <%= text_input f, :lyrics %>
+  <%= error_tag f, :lyrics %>
 
   <%= submit "Save", phx_disable_with: "Saving..." %>
 </form>
