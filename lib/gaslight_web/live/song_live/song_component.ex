@@ -1,30 +1,24 @@
 defmodule GaslightWeb.SongLive.SongComponent do
 	use GaslightWeb, :live_component
 
-  # def render(assigns) do
-  #   ~L"""
-  #   <div class="post">
-  #     <%= live_redirect @title, to: Routes.song_show_path(@socket, :show, @id) %>
-  #   </div>
-  #   """
-  # end
   def render(assigns) do
     ~L"""
     <div class="post">
       <div class="row">
-      <div class="post-avatar" style="background-image:url('https://picsum.photos/200')">
+      <div class="post-avatar">
+      <%= img_tag(@song.img_url) %>
         </div>
         <div class="column">
           <div class="post-body" >
             <br />
-            <%= live_redirect @title, to: Routes.song_show_path(@socket, :show, @id) %>
+            <%= live_redirect @song.title, to: Routes.song_show_path(@socket, :show, @id) %>
           </div>
         </div>
       </div>
       <div class="social-buttons">
         <div>
           <a href="#" phx-click="like" phx-target="<%= @myself %>">
-          <i class="far fa-thumbs-up"></i> <%= @num_likes %>
+          <i class="far fa-thumbs-up"></i> <%= @song.num_likes %>
            </a>
         </div>
         <div>

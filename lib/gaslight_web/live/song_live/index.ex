@@ -7,7 +7,7 @@ defmodule GaslightWeb.SongLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Markov.subscribe()
-    {:ok, assign(socket, :songs, list_songs())}
+    {:ok, assign(socket, :songs, list_songs()), temporary_assigns: [songs: []]}
   end
 
   @impl true
@@ -15,7 +15,7 @@ defmodule GaslightWeb.SongLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"" => id}) do
+  defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Song")
     |> assign(:song, Markov.get_song!(id))
@@ -54,11 +54,11 @@ defmodule GaslightWeb.SongLive.Index do
 
   def handle_event("saveSong", params, socket) do
     case Markov.create_song(params) do
-      {:ok, _song} ->
+      {:ok, song} ->
         {:noreply,
          socket
          |> put_flash(:info, "Song Saved Successfully")
-         |> push_redirect(to: "/songs/new")}
+         |> push_redirect(to: "/songs/")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -71,7 +71,12 @@ defmodule GaslightWeb.SongLive.Index do
   end
 
   def handle_info({:song_updated, song}, socket) do
+    IO.inspect(socket, [])
     {:noreply, update(socket, :songs, fn songs -> [song | songs] end)}
+  end
+
+  def handle_info({:song_deleted, _song}, socket) do
+    {:noreply, update(socket, :songs, fn songs -> [songs] end)}
   end
 
   defp list_songs do

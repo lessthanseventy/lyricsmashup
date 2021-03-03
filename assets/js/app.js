@@ -39,15 +39,18 @@ Hooks.Lyrics = {
     document.getElementById("genButton").addEventListener("click", onSubmit);
     document.getElementById("addButton").addEventListener("click", onSubmit);
     document.getElementById("clearButton").addEventListener("click", reinit);
+
     const view = this;
     let lyricsArray = [];
     let songToSave = {};
+    let imgUrl = "";
 
     function sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
     function reinit() {
       lyricsArray = [];
+      imgUrl = "";
       document.getElementById("lyrics").innerHTML = "";
       document.getElementById("songsOutput").innerHTML = "";
       document.getElementById("genButton").style.display = "block";
@@ -88,7 +91,6 @@ Hooks.Lyrics = {
       const result = await body.json();
       if (result) {
         rhymingWord = result[counter];
-        console.log(rhymingWord);
         if (!rhymingWord || rhymingWord.length < 3) {
           return undefined;
         }
@@ -96,9 +98,20 @@ Hooks.Lyrics = {
       if (result.error) {
         throw new Error(`${result.error}: ${result.error_description}`);
       }
-      console.log(result);
       return rhymingWord;
     }
+
+    async function getImageUrl() {
+      const url = `https://cryptic-hamlet-30617.herokuapp.com/https://picsum.photos/v2/list?limit=100`;
+      const body = await fetch(url);
+      const result = await body.json();
+      if (result.error) {
+        throw new Error(`${result.error}: ${result.error_description}`);
+      }
+      let img = Math.floor(Math.random() * 99);
+      return result[img].download_url;
+    }
+
     async function _request(path) {
       const url = `https://cryptic-hamlet-30617.herokuapp.com/https://api.genius.com/${path}`;
 
@@ -246,6 +259,7 @@ Hooks.Lyrics = {
         maxLength: 7,
       });
       let title;
+      imgUrl = await getImageUrl();
       do {
         title = titleMarkov.makeChain();
       } while (
@@ -309,6 +323,7 @@ Hooks.Lyrics = {
       document.getElementById("loadingSpinner").style.display = "none";
       document.getElementById("lyrics").innerHTML = html;
       let songToSave = {
+        img_url: imgUrl,
         title: title.toString(),
         lyrics: html.toString(),
       };
@@ -316,6 +331,7 @@ Hooks.Lyrics = {
     }
     var listener = {
       handleEvent: function (event) {
+        console.log(songToSave);
         view.pushEvent("saveSong", songToSave);
         reinit();
       },

@@ -6,12 +6,14 @@ defmodule Gaslight.Markov.Song do
     field :title, :string
     field :lyrics, :string
     field :num_likes, :integer, default: 0
+    field :img_url, :string
+
     timestamps()
   end
 
   @doc false
   def changeset(song, attrs) do
     song
-    |> cast(attrs, [:title, :lyrics])
+    |> cast(attrs, [:title, :lyrics, :img_url])
   end
 end

@@ -10,4 +10,4 @@
   <%= raw(@song.lyrics) %>
 </div>
 <span id="showSongEditButton"><%= live_patch "Edit", to: Routes.song_show_path(@socket, :edit, @song), class: "button" %></span>
-<span id="showSongBackLink"><%= live_redirect "Back", to: Routes.song_index_path(@socket, :index) %></span>
+<span id="showSongBackLink"><%= live_redirect "Back", to: Routes.song_index_path(@socket, :list) %></span>

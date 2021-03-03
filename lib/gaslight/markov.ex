@@ -89,6 +89,7 @@ defmodule Gaslight.Markov do
   """
   def delete_song(%Song{} = song) do
     Repo.delete(song)
+    broadcast({:ok, song}, :song_deleted)
   end
 
   @doc """
