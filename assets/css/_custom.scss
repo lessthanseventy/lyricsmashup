@@ -7,7 +7,15 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     --main-text-color: #EEE;
     --alt-bg-color: #000;
 }
+.phx-error {
+    border: 1px solid red;
+    opacity: .5;
+    cursor: not-allowed;
+}
 
+.phx-error * {
+    pointer-events: none;
+}
 body {
     background: var(--main-bg-color);
     color: var(--main-text-color);
