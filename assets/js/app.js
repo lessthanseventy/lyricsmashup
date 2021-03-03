@@ -76,8 +76,7 @@ Hooks.Lyrics = {
         .then((lyrics) => generateSong(lyrics))
         .then((song) => (songToSave = song))
         .catch((err) => {
-          view.pushEvent("bandError", {});
-          reinit();
+          console.log(err);
         });
     }
 
