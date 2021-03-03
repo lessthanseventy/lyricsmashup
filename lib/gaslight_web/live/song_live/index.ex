@@ -52,7 +52,6 @@ defmodule GaslightWeb.SongLive.Index do
   end
 
   def handle_event("saveSong", params, socket) do
-  IO.inspect(socket, [])
     case Markov.create_song(params) do
       {:ok, _song} ->
         {:noreply,

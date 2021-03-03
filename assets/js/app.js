@@ -21,7 +21,7 @@ import "regenerator-runtime/runtime";
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 const Markov = require("markov-generator");
-const datamuse = require("datamuse");
+const datamuse = require("./datamuse");
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -44,6 +44,9 @@ Hooks.Lyrics = {
     let lyricsArray = [];
     let songToSave = {};
 
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
     function reinit() {
       lyricsArray = [];
       document.getElementById("lyrics").innerHTML = "";
@@ -60,11 +63,14 @@ Hooks.Lyrics = {
       document.getElementById("clearButton").style.display = "block";
       document.getElementById("loadingSpinner").style.display = "block";
       document.getElementById("saveButton").style.display = "block";
+
       let lyrics = document.getElementById("lyrics");
       while (lyrics.firstChild) {
         lyrics.removeChild(lyrics.firstChild);
       }
+
       let inputValue = document.getElementById("inputForm").value.toString();
+
       await artistByName(inputValue)
         .then((res) => songsOutput(res))
         .then((songs) => loopForLyrics(songs))
@@ -76,6 +82,25 @@ Hooks.Lyrics = {
         });
     }
 
+    async function getRhymingWord(word) {
+      let counter = 0;
+      let rhymingWord;
+      const url = `https://cryptic-hamlet-30617.herokuapp.com/https://api.datamuse.com/words?rel_rhy=${word}`;
+      const body = await fetch(url);
+      const result = await body.json();
+      if (result) {
+        rhymingWord = result[counter];
+        console.log(rhymingWord);
+        if (!rhymingWord || rhymingWord.length < 3) {
+          return undefined;
+        }
+      }
+      if (result.error) {
+        throw new Error(`${result.error}: ${result.error_description}`);
+      }
+      console.log(result);
+      return rhymingWord;
+    }
     async function _request(path) {
       const url = `https://cryptic-hamlet-30617.herokuapp.com/https://api.genius.com/${path}`;
 
@@ -84,10 +109,14 @@ Hooks.Lyrics = {
       const result = await body.json();
 
       // Handle errors
-      if (result.error)
+      if (result.error) {
+        console.log(result);
         throw new Error(`${result.error}: ${result.error_description}`);
-      if (result.meta.status !== 200)
+      }
+      if (result.meta.status !== 200) {
+        console.log(result);
         throw new Error(`${result.meta.status}: ${result.meta.message}`);
+      }
 
       return result.response;
     }
@@ -127,7 +156,7 @@ Hooks.Lyrics = {
 
     async function songsByArtist(
       id,
-      { page = 1, perPage = 15, sort = "popularity" } = {}
+      { page = 1, perPage = 10, sort = "popularity" } = {}
     ) {
       if (!id)
         throw new Error("No ID was provided to lyricist.songsByArtist()");
@@ -193,6 +222,7 @@ Hooks.Lyrics = {
     async function loopForLyrics(arr) {
       let temp = [];
       for (let i = 0; i < arr.length; i++) {
+        await sleep(250);
         await song(arr[i].id, { fetchLyrics: true }).then(function (res) {
           /* remove [Verse] and such and any parentheses */
           temp.push(
@@ -220,7 +250,6 @@ Hooks.Lyrics = {
       let title;
       do {
         title = titleMarkov.makeChain();
-        console.log(title);
       } while (
         title.split(" ")[0].length > 12 ||
         title.split(" ")[0] == title.split(" ")[1] ||
@@ -235,29 +264,24 @@ Hooks.Lyrics = {
         });
         let firstLine = markov
           .makeChain()
-          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()"]/g, "")
-          .replace(/\s{2,}/g, " ");
-        // Regenerate line if first two words are duplicated
+          .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()"]/g, "") // Remove punctuation
+          .replace(/\s{2,}/g, " "); // Fix double spaces from ^
+        let rhymer = firstLine.split(" ").pop();
+        let rhymingWord = await getRhymingWord(rhymer);
         while (
           firstLine.split(" ")[0].toLowerCase() ==
             firstLine.split(" ")[1].toLowerCase() ||
-          firstLine.split(" ")[0].length > 10
+          firstLine.split(" ")[1].toLowerCase() ==
+            firstLine.split(" ")[2].toLowerCase() ||
+          firstLine.split(" ")[0].length > 10 ||
+          !rhymingWord
         ) {
           firstLine = markov
             .makeChain()
             .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()"]/g, "") // Remove punctuation
             .replace(/\s{2,}/g, " "); // Fix double spaces from ^
-        }
-        let rhymer = firstLine.split(" ").pop();
-        let rhymes = await datamuse.words({
-          rel_rhy: rhymer,
-        });
-        if (rhymes.length === 0) {
-          firstLine = firstLine.substring(0, firstLine.lastIndexOf(" "));
           rhymer = firstLine.split(" ").pop();
-          rhymes = await datamuse.words({
-            rel_rhy: rhymer,
-          });
+          rhymingWord = await getRhymingWord(rhymer);
         }
         let secondLine = markov
           .makeChain()
@@ -267,19 +291,15 @@ Hooks.Lyrics = {
         while (
           secondLine.split(" ")[0].toLowerCase() ==
             secondLine.split(" ")[1].toLowerCase() ||
-          firstLine.split(" ")[0].length > 10
+          secondLine.split(" ")[1].toLowerCase() ==
+            secondLine.split(" ")[2].toLowerCase() ||
+          secondLine.split(" ")[0].length > 10
         ) {
           secondLine = markov
             .makeChain()
             .replace(/[.,\/#!$?%\^&\*;:{}=\_`~()]/g, "") // Remove punctuation
             .replace(/\s{2,}/g, " "); // Fix double spaces from ^
         }
-        let rhymingWord;
-        let counter = 0;
-        do {
-          rhymingWord = rhymes[counter];
-          counter = counter + 1;
-        } while (rhymingWord.word.length < 3);
         secondLine += ` ${rhymingWord.word.toString()}`;
         if (i != 0 && i % 2 == 0) {
           html += "<div><br></div>";
@@ -287,6 +307,7 @@ Hooks.Lyrics = {
         html += "<div>" + firstLine + "</div>";
         html += "<div>" + secondLine + "</div>";
       }
+
       document.getElementById("loadingSpinner").style.display = "none";
       document.getElementById("lyrics").innerHTML = html;
       let songToSave = {
