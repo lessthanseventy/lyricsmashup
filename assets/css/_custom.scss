@@ -18,11 +18,22 @@ body {
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
-        & p.alert {
+        & p.alert-danger {
             width: 80vw;
             text-align: center;
             color: white;
             background: #ff0f0f;
+            border: none;
+            font-size: 2.25rem;
+            height: 4.5rem;
+            line-height: 2.25rem;
+            position: absolute;
+        }
+        & p.alert-info {
+            width: 80vw;
+            text-align: center;
+            color: white;
+            background: #0069d9;
             border: none;
             font-size: 2.25rem;
             height: 4.5rem;

@@ -26,7 +26,7 @@ defmodule GaslightWeb.Router do
     live "/posts/:id/show/edit", PostLive.Show, :edit
 
     live "/songs/new", SongLive.Index, :index
-    live "/songs/list", SongLive.Index, :list
+    live "/songs/", SongLive.Index, :list
     live "/songs/:id/edit", SongLive.Index, :edit
 
     live "/songs/:id", SongLive.Show, :show
