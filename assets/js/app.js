@@ -21,7 +21,6 @@ import "regenerator-runtime/runtime";
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
 const Markov = require("markov-generator");
-const datamuse = require("./datamuse");
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
