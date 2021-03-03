@@ -6,6 +6,7 @@ defmodule GaslightWeb.SongLive.Index do
   alias Gaslight.Repo
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Markov.subscribe()
     {:ok, assign(socket, :songs, list_songs())}
   end
 
@@ -62,6 +63,15 @@ defmodule GaslightWeb.SongLive.Index do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
     end
+  end
+
+  @impl true
+  def handle_info({:song_created, song}, socket) do
+    {:noreply, update(socket, :songs, fn songs -> [song | songs] end)}
+  end
+
+  def handle_info({:song_updated, song}, socket) do
+    {:noreply, update(socket, :songs, fn songs -> [song | songs] end)}
   end
 
   defp list_songs do

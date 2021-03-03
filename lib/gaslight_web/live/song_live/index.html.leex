@@ -34,7 +34,10 @@
 <% end %>
 
 <%= if @live_action in [:list] do %>
+<button id="newSongButton" class="btn-success"><%= live_patch "New Song", to: Routes.post_index_path(@socket, :new) %></button>
+<div id="posts" phx-update="prepend">
   <%= for song <- @songs do %>
-    <%= live_component @socket, GaslightWeb.SongLive.SongComponent, title: song.title, lyrics: song.lyrics, id: song.id %>
+    <%= live_component @socket, GaslightWeb.SongLive.SongComponent, song: song, title: song.title, lyrics: song.lyrics, id: song.id, num_likes: song.num_likes %>
   <% end %>
+</div>
 <% end %>

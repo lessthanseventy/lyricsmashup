@@ -18,7 +18,7 @@ defmodule Gaslight.Markov do
 
   """
   def list_songs do
-    Repo.all(Song)
+    Repo.all(from s in Song, order_by: [desc: s.id])
   end
 
   @doc """
@@ -53,6 +53,7 @@ defmodule Gaslight.Markov do
     %Song{}
     |> Song.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:song_created)
   end
 
   @doc """
@@ -71,6 +72,7 @@ defmodule Gaslight.Markov do
     song
     |> Song.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:song_updated)
   end
 
   @doc """
@@ -92,7 +94,7 @@ defmodule Gaslight.Markov do
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking song changes.
 
-  ## Examples
+  ## songs
 
       iex> change_song(song)
       %Ecto.Changeset{data: %Song{}}
@@ -100,5 +102,23 @@ defmodule Gaslight.Markov do
   """
   def change_song(%Song{} = song, attrs \\ %{}) do
     Song.changeset(song, attrs)
+  end
+
+  def inc_likes(%Song{id: id}) do
+    {1, [song]} =
+      from(s in Song, where: s.id == ^id, select: s)
+    |> Repo.update_all(inc: [num_likes: 1])
+
+    broadcast({:ok, song}, :song_updated)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(Gaslight.PubSub, "songs")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:ok, song}, event) do
+    Phoenix.PubSub.broadcast(Gaslight.PubSub, "songs", {event, song})
+    {:ok, song}
   end
 end

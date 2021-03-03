@@ -5,6 +5,7 @@ defmodule Gaslight.Markov.Song do
   schema "songs" do
     field :title, :string
     field :lyrics, :string
+    field :num_likes, :integer, default: 0
     timestamps()
   end
 
