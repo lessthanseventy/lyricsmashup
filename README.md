@@ -1,4 +1,4 @@
-# Gaslight
+# Lyricsmashup
 
 To start your Phoenix server:
 

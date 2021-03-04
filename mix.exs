@@ -1,9 +1,9 @@
-defmodule Gaslight.MixProject do
+defmodule Lyricsmashup.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :gaslight,
+      app: :lyricsmashup,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Gaslight.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Gaslight.Application, []},
+      mod: {Lyricsmashup.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

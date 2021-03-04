@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :gaslight,
-  ecto_repos: [Gaslight.Repo]
+config :lyricsmashup,
+  ecto_repos: [Lyricsmashup.Repo]
 
 # Configures the endpoint
-config :gaslight, GaslightWeb.Endpoint,
+config :lyricsmashup, LyricsmashupWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "fl+ZBX0c8Sb2Y535RI78YTVDi5psIfJrL6KmZAO1rFhTJyZJiKQGNuKuoF6K/la5",
-  render_errors: [view: GaslightWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Gaslight.PubSub,
+  render_errors: [view: LyricsmashupWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Lyricsmashup.PubSub,
   live_view: [signing_salt: "TATMt0JZrV/XnuUzIBksI75n63LMv5N8"]
 
 # Configures Elixir's Logger

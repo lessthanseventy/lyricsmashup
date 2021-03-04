@@ -1,5 +1,5 @@
-defmodule GaslightWeb.PageLiveTest do
-  use GaslightWeb.ConnCase
+defmodule LyricsmashupWeb.PageLiveTest do
+  use LyricsmashupWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

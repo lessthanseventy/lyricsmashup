@@ -1,4 +1,4 @@
-defmodule Gaslight.Repo.Migrations.AlterSongsTableAddCols do
+defmodule Lyricsmashup.Repo.Migrations.AlterSongsTableAddCols do
   use Ecto.Migration
 
   def change do

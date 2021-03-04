@@ -1,9 +1,9 @@
-defmodule GaslightWeb.SongLiveTest do
-  use GaslightWeb.ConnCase
+defmodule LyricsmashupWeb.SongLiveTest do
+  use LyricsmashupWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias Gaslight.Markov
+  alias Lyricsmashup.Markov
 
   @create_attrs %{artist: "some artist", genius_lyrics: "some genius_lyrics", songs: []}
   @update_attrs %{artist: "some updated artist", genius_lyrics: "some updated genius_lyrics", songs: []}

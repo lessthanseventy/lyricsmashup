@@ -1,4 +1,4 @@
-defmodule Gaslight.Repo.Migrations.CreatePosts do
+defmodule Lyricsmashup.Repo.Migrations.CreatePosts do
   use Ecto.Migration
 
   def change do

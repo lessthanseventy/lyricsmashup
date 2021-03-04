@@ -1,10 +1,10 @@
-defmodule Gaslight.MarkovTest do
-  use Gaslight.DataCase
+defmodule Lyricsmashup.MarkovTest do
+  use Lyricsmashup.DataCase
 
-  alias Gaslight.Markov
+  alias Lyricsmashup.Markov
 
   describe "songs" do
-    alias Gaslight.Markov.Song
+    alias Lyricsmashup.Markov.Song
 
     @valid_attrs %{artist: "some artist", genius_lyrics: "some genius_lyrics", songs: []}
     @update_attrs %{artist: "some updated artist", genius_lyrics: "some updated genius_lyrics", songs: []}

@@ -3,10 +3,10 @@ use Mix.Config
 database_url = System.get_env("DATABASE_URL")
 
 # Configure your database
-config :gaslight, Gaslight.Repo,
+config :lyricsmashup, Lyricsmashup.Repo,
   username: "postgres",
   password: "postgres",
-  database: "gaslight_dev",
+  database: "lyricsmashup_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -17,7 +17,7 @@ config :gaslight, Gaslight.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :gaslight, GaslightWeb.Endpoint,
+config :lyricsmashup, LyricsmashupWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -57,13 +57,13 @@ config :gaslight, GaslightWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :gaslight, GaslightWeb.Endpoint,
+config :lyricsmashup, LyricsmashupWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/gaslight_web/(live|views)/.*(ex)$",
-      ~r"lib/gaslight_web/templates/.*(eex)$"
+      ~r"lib/lyricsmashup_web/(live|views)/.*(ex)$",
+      ~r"lib/lyricsmashup_web/templates/.*(eex)$"
     ]
   ]
 

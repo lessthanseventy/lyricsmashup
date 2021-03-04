@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(Gaslight.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Lyricsmashup.Repo, :manual)
