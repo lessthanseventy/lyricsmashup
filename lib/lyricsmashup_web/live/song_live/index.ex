@@ -53,12 +53,13 @@ defmodule LyricsmashupWeb.SongLive.Index do
   end
 
   def handle_event("saveSong", params, socket) do
+    IO.inspect(params, [])
     case Markov.create_song(params) do
       {:ok, _song} ->
         {:noreply,
          socket
          |> put_flash(:info, "Song Saved Successfully")
-         |> push_redirect(to: "/new")}
+         |> push_redirect(to: "/")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

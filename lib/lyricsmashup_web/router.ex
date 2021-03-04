@@ -17,9 +17,7 @@ defmodule LyricsmashupWeb.Router do
   scope "/", LyricsmashupWeb do
     pipe_through :browser
 
-    live "/", SongLive.Index, :list
-
-    live "/new", SongLive.Index, :index
+    live "/", SongLive.Index, :index
     live "/songs/", SongLive.Index, :list
     live "/songs/:id/edit", SongLive.Index, :edit
 

@@ -10,4 +10,4 @@ RUN mkdir assets
 
 COPY assets/package.json assets
 
-CMD mix deps.get && cd assets && rm -rf ./node_modules && npm install && cd .. && mix phx.server
+CMD mix ecto.setup && mix deps.get && cd assets && rm -rf ./node_modules && npm install && cd .. && mix phx.server
