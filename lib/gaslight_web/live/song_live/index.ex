@@ -54,11 +54,11 @@ defmodule GaslightWeb.SongLive.Index do
 
   def handle_event("saveSong", params, socket) do
     case Markov.create_song(params) do
-      {:ok, song} ->
+      {:ok, _song} ->
         {:noreply,
          socket
          |> put_flash(:info, "Song Saved Successfully")
-         |> push_redirect(to: "/songs/")}
+         |> push_redirect(to: "/new")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

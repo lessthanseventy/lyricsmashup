@@ -27,6 +27,7 @@ body {
             height: 4.5rem;
             line-height: 2.25rem;
             position: absolute;
+            z-index: 999;
         }
         & p.alert-info {
             width: 80vw;
@@ -38,6 +39,7 @@ body {
             height: 4.5rem;
             line-height: 2.25rem;
             position: absolute;
+            z-index: 999;
         }
         // New Songs Styles
         & #songInputs {
