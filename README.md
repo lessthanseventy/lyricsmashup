@@ -1,9 +1,10 @@
 # Lyricsmashup
 
-To start your Phoenix server:
-
+To start:
+  * Clone this repository `git clone https://github.com/lessthanseventy/lyricsmashup.git`
+  * `cd lyricsmashup`
   * Create and migrate your database with `mix ecto.setup`
-  * docker-compose build && docker-compose up
+  * `docker-compose build && docker-compose up`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
