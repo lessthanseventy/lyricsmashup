@@ -41,6 +41,12 @@ body {
             position: absolute;
             z-index: 999;
         }
+        & .phx-modal-content {
+            background: black;
+            & * {
+                color: white;
+            }
+        }
         // New Songs Styles
         & #songInputs {
             display: flex;

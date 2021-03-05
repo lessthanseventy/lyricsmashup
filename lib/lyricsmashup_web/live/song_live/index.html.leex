@@ -6,7 +6,7 @@
     title: @page_title,
     action: @live_action,
     song: @song,
-    return_to: Routes.song_index_path(@socket, :index) %>
+    return_to: Routes.song_index_path(@socket, :list) %>
 <% end %>
 
 <%= if @live_action in [:index] do %>
